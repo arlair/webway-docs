@@ -9,6 +9,21 @@ This repository uses **pnpm workspaces** to manage multiple projects (sites, app
 - **`packages/`**: Shared libraries (e.g., `svelte-ui`, `core`).
 - **`docs/`**: Project documentation.
 
+## Git Repository Structure
+
+**Crucial:** While this functions as a pnpm monorepo for dependencies, **it is composed of multiple independent git repositories**.
+
+- **Root (`/`)**: Tracks only workspace configuration (pnpm-lock.yaml, global docs, etc.).
+- **Sub-projects (`sites/*`, `packages/*`)**: Each is a **separate git repository**.
+
+### Workflow Implications
+
+1.  **Context Matters**: You must `cd` into the specific directory to run git commands for that project.
+    - ❌ `git status` at root → Shows only root config changes.
+    - ✅ `cd sites/archlinks && git status` → Shows site changes.
+2.  **No Atomic Commits**: You cannot commit changes across multiple sites/packages in one go. You must commit to each repo individually.
+3.  **Submodules**: The root repo likely tracks these as submodules (or separate clones), meaning the root knows "where" the sub-repos are pointing, but doesn't track their content directly.
+
 ## How Workspaces Work
 
 We use `pnpm` to link packages locally.
