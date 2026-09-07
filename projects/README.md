@@ -13,6 +13,7 @@ This directory serves as the Wayfinder index mapping all active applications, si
 - **[enlucent](../../../sites/enlucent/package.json)** - Marketing site and landing page for the Enlucent suite.
 - **[portablecoffee](../../../sites/portablecoffee/docs/README.md)** - Affiliate site showcasing portable espresso makers and roasters.
 - **[rationaldev](../../../sites/rationaldev/docs/README.md)** - Web developer tips and affiliate resources.
+- **[selective-tales-admin](../../../sites/selective-tales-admin/docs/README.md)** - Local admin workspace for the Selective Tales app.
 - **[travelwebway](../../../sites/travelwebway/docs/README.md)** - Travel affiliate and routing content website.
 - **[ui-playground](../../../sites/ui-playground/README.md)** - Staging and development sandbox for testing shared UI components.
 - **[webway-admin](../../../sites/webway-admin/docs/README.md)** - Central workspace administration panel.
