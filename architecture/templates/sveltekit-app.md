@@ -1,168 +1,29 @@
-# SvelteKit App Template
+# SvelteKit app pattern
 
-Standard architecture for SvelteKit applications.
+Use the target project's manifest, `svelte.config.*` and local docs to identify
+its adapter, persistence and authentication. Webway-admin and
+selective-tales-admin have separate domain and data lifecycles; do not assume
+one app's PostgreSQL or deployment setup applies to the other.
 
-## Projects Using This Template
+## Structure and boundaries
 
-- webway-admin
+- `src/routes/`: framework route entry points, load functions and actions.
+- `src/domain/`: domain logic, schemas and persistence modules where established.
+- `src/lib/`: existing shared utilities and server-only modules.
+- Keep route entry points thin; call the project's domain/persistence boundary.
+- Use generated route types for load functions, actions and request handlers.
+- Validate input with existing schemas before persistence; enforce the project's
+  authentication and authorization at server boundaries.
+- Reuse existing form helpers and error handling. Do not introduce a new form
+  library or replace hooks based on a generic example.
 
----
+## References
 
-## Tech Stack
+- [SvelteKit frontend guidance](../../frontend/sveltekit.md)
+- [Database guidance](../../backend/README.md)
+- [Shared SvelteKit package](../../../../packages/sveltekit/README.md)
+- [Projects index](../../projects/README.md)
 
-| Layer      | Technology                   |
-| ---------- | ---------------------------- |
-| Framework  | SvelteKit 2                  |
-| UI         | Svelte 5 (Runes API)         |
-| Styling    | TailwindCSS 4 + DaisyUI 5    |
-| Database   | PostgreSQL via `postgres.js` |
-| Forms      | Superforms + Valibot         |
-| Deployment | Node adapter / Cloudflare    |
-
----
-
-## Required Packages
-
-| Package                                          | Purpose                       |
-| ------------------------------------------------ | ----------------------------- |
-| [@eldarlabs/core](../packages/core.md)           | Utilities, DB access, schemas |
-| [@eldarlabs/svelte-ui](../packages/svelte-ui.md) | Svelte 5 UI components        |
-| [@eldarlabs/sveltekit](../packages/sveltekit.md) | SvelteKit utilities           |
-
----
-
-## Folder Structure
-
-```
-src/
-├── routes/               # SvelteKit routes
-│   ├── +layout.svelte    # Root layout
-│   ├── +page.svelte      # Homepage
-│   ├── api/              # API routes
-│   │   └── [resource]/
-│   │       └── +server.ts
-│   └── [feature]/
-│       ├── +page.svelte
-│       ├── +page.server.ts
-│       └── [id]/
-│           └── +page.svelte
-│
-├── domain/               # Domain-driven features
-│   └── <feature>/
-│       ├── <feature>-db.server.ts  # Database queries
-│       ├── <feature>-schema.ts     # Valibot schemas
-│       └── <Feature>Table.svelte   # Domain UI component
-│
-├── lib/                  # Shared utilities
-│   ├── components/       # Generic UI components
-│   └── server/           # Server-only utilities
-│
-└── app.html              # HTML template
-```
-
----
-
-## Data Loading
-
-### Server Load Functions
-
-```typescript
-// +page.server.ts
-import { withSql } from "@eldarlabs/core/db/sql.server";
-
-export const load = async ({ params }) => {
-  const items = await withSql(async (sql) => {
-    return sql`SELECT * FROM items WHERE id = ${params.id}`;
-  });
-
-  return { items };
-};
-```
-
-### API Routes
-
-```typescript
-// routes/api/items/+server.ts
-import { json } from "@sveltejs/kit";
-import { withSql } from "@eldarlabs/core/db/sql.server";
-
-export const GET = async ({ url }) => {
-  const items = await withSql(async (sql) => {
-    return sql`SELECT * FROM items`;
-  });
-
-  return json({ items });
-};
-```
-
----
-
-## Form Handling
-
-Using Superforms with Valibot:
-
-```typescript
-// +page.server.ts
-import { superValidate, fail } from "sveltekit-superforms";
-import { valibot } from "sveltekit-superforms/adapters";
-import { itemSchema } from "$domain/items/item-schema";
-
-export const load = async () => {
-  const form = await superValidate(valibot(itemSchema));
-  return { form };
-};
-
-export const actions = {
-  default: async ({ request }) => {
-    const form = await superValidate(request, valibot(itemSchema));
-
-    if (!form.valid) {
-      return fail(400, { form });
-    }
-
-    // Process valid form data
-    await saveItem(form.data);
-
-    return { form };
-  },
-};
-```
-
----
-
-## Authentication
-
-```typescript
-// hooks.server.ts
-import type { Handle } from "@sveltejs/kit";
-
-export const handle: Handle = async ({ event, resolve }) => {
-  // Check authentication
-  const session = await getSession(event.cookies);
-  event.locals.user = session?.user;
-
-  return resolve(event);
-};
-```
-
----
-
-## Development
-
-```bash
-# Start dev server
-npm run dev
-
-# Build for production
-npm run build
-
-# Preview production build
-npm run preview
-```
-
----
-
-## Related Documentation
-
-- [Coding Guidelines](../../coding-guidelines.md) - Code style rules
-- [Testing Strategy](../../testing.md) - Testing approach
+Run only scripts declared by the target manifest with pnpm. Use
+[testing guidance](../../testing.md) to choose checks and
+[release guidance](../../RELEASE.md) for deployment.

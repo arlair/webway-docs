@@ -6,6 +6,7 @@ This directory serves as the Wayfinder index mapping all active applications, si
 
 - **[enlucent-app](../../../apps/enlucent-app/docs/README.md)** - React/Electron desktop application for managing local documents and variables.
 - **[enlucent-cli](../../../apps/enlucent-cli/README.md)** - Command-line compilation tool for headlessly building prompt and template files.
+- **[selective-tales-app](../../../apps/selective-tales-app/README.md)** - Browser game with story-driven combat and encounters.
 
 ## 🌐 Sites
 

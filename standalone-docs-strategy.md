@@ -1,6 +1,7 @@
 # Standalone Documentation Strategy
 
-> **Status:** RFC (Request for Comments)  
+> **Status:** RFC (Request for Comments), not implemented. Example domains,
+> templates and commands below are proposals, not configured infrastructure.
 > **Problem:** When sites are cloned standalone (outside the monorepo), relative links to `docs/webway/` break.
 
 ---

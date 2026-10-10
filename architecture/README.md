@@ -1,74 +1,33 @@
-# Architecture Overview
+# Architecture guidance
 
-This directory contains modular architecture documentation for the webway workspace.
+Use the target project's current architecture and nearest `AGENTS.md`. These
+patterns are starting points, not a requirement to reshape every project.
 
-## Shared Principles
+## Shared principles
 
-All projects in this workspace follow these core principles:
+- Keep feature logic with its domain where the project uses `src/domain/`.
+  Preserve framework entry points and existing module boundaries.
+- Reuse existing shared packages and fix shared defects at their source.
+  See the [coding guidelines](../coding-guidelines.md).
+- Choose persistence guidance by the actual backend: [PostgreSQL, D1 or SQLite](../backend/README.md).
+  Use `withSql` for PostgreSQL projects that follow that boundary, not for every database.
+- Preserve strict types and validate external data using the project's existing schemas.
 
-### 1. Domain-Driven Structure
+## Project patterns
 
-Code is organized by business domain in `src/domain/`:
+| Work                                | Read                                      |
+| ----------------------------------- | ----------------------------------------- |
+| Astro sites and islands             | [Astro](./templates/astro-site.md)        |
+| SvelteKit routes and server logic   | [SvelteKit](./templates/sveltekit-app.md) |
+| Electron main, preload and renderer | [Electron](./templates/electron-app.md)   |
+| AI generation features              | [AI generation](./ai-generation.md)       |
 
-```
-src/domain/
-├── <domain-name>/
-│   ├── <feature>.ts          # Logic
-│   ├── <Feature>.svelte      # UI component
-│   └── <feature>-db.server.ts # Database access
-```
+Find package APIs and project-specific architecture through the
+[projects index](../projects/README.md). For linking, validation and releases,
+read [workspace setup](../workspace-setup.md), [testing](../testing.md) or
+[release guidance](../RELEASE.md) as needed.
 
-### 2. No Duplication
+## Active spikes
 
-Use the shared `@eldarlabs/*` packages instead of duplicating logic:
-
-- Utilities and business logic → `@eldarlabs/core`
-- UI components → `@eldarlabs/svelte-ui`
-- Astro layouts → `@eldarlabs/astro`
-
-### 3. Database Access
-
-- PostgreSQL via `postgres.js`
-- Use `withSql` wrapper from `@eldarlabs/core` for connection management
-- Define DTOs/interfaces for all query results
-
-### 4. Type Safety
-
-- TypeScript strict mode
-- No `any` types
-- Runtime validation with Valibot schemas
-
----
-
-## Packages
-
-Individual package documentation:
-
-- [@eldarlabs/core](../../../packages/core/README.md) - Framework-agnostic utilities
-- [@eldarlabs/svelte-ui](../../../packages/svelte-ui/README.md) - Svelte 5 UI components
-- [@eldarlabs/astro](../../../packages/astro/README.md) - Astro layouts and integrations
-- [@eldarlabs/sveltekit](../../../packages/sveltekit/README.md) - SvelteKit utilities
-- [@eldarlabs/toolkit](../../../packages/toolkit/README.md) - Build tools
-- [@enlucent/engine](../../../packages/enlucent-engine/README.md) - Template compilation and variable resolution engine
-- [enlucent-cli](../../../apps/enlucent-cli/README.md) - Standalone native CLI build application
-
----
-
-## Project Templates
-
-Choose the template that matches your project type:
-
-| Template                                      | Projects                                                       |
-| --------------------------------------------- | -------------------------------------------------------------- |
-| [Astro Site](./templates/astro-site.md)       | portablecoffee, travelwebway, archlinks, rationaldev, enlucent |
-| [SvelteKit App](./templates/sveltekit-app.md) | webway-admin                                                   |
-| [Electron App](./templates/electron-app.md)   | enlucent-app                                                   |
-
----
-
-## Related Documentation
-
-- [Workspace Setup](../workspace-setup.md) - pnpm workspaces and linking
-- [Coding Guidelines](../coding-guidelines.md) - Code style and constraints
-- [Testing Strategy](../testing.md) - Testing philosophy
-- [Release Process](../RELEASE.md) - Versioning and deployment
+- [Dev Cockpit backend spike](./dev-cockpit-backend-spike.md) — one shared
+  SwiftUI shell comparing a Swift/XPC supervisor with a Go/socket supervisor.

@@ -1,175 +1,38 @@
-# Astro Site Template
+# Astro site pattern
 
-Standard architecture for Astro 5 static sites with Svelte 5 islands.
+Applies to Astro projects such as portablecoffee, travelwebway, archlinks,
+rationaldev and enlucent. Read the target manifest and `astro.config.*`;
+output mode, content loaders and deployment differ between sites.
 
-## Projects Using This Template
+## Configuration and structure
 
-- portablecoffee
-- travelwebway
-- archlinks
-- rationaldev
-- enlucent
+- Preserve the target site's `src/pages/`, content collections and domain structure.
+- Inspect its `src/content.config.ts` (or existing collection configuration)
+  before adding content; use its schemas and loaders.
+- Portablecoffee currently uses static output; Travelwebway uses server output
+  with the Cloudflare adapter. Do not copy an adapter or output mode between them.
+- Their Tailwind setup uses `@tailwindcss/vite`; preserve the existing integration.
+- Follow the [workspace linking guidance](../../workspace-setup.md) for linked
+  Svelte packages and [frontend guidance](../../frontend/README.md) for islands and styling.
 
----
+Use shared [Astro](../../../../packages/astro/README.md),
+[Svelte UI](../../../../packages/svelte-ui/README.md) and
+[core](../../../../packages/core/README.md) APIs where already applicable.
+This list is not an instruction to add dependencies.
 
-## Tech Stack
+## Content and islands
 
-| Layer      | Technology                                             |
-| ---------- | ------------------------------------------------------ |
-| Framework  | Astro 5 (Static Site Generation + Island Architecture) |
-| UI Islands | Svelte 5 (Runes API)                                   |
-| Styling    | TailwindCSS 4 + DaisyUI 5                              |
-| Database   | PostgreSQL via `postgres.js` (where applicable)        |
-| Deployment | Cloudflare Pages                                       |
+Keep server/build-time data access outside browser islands. Choose hydration
+(`client:load`, `client:idle`, `client:visible`) for the interaction needed.
+Use the site's existing draft/publication filtering; development mode alone
+may not describe stage and production publication rules.
 
----
+## Commands and deployment
 
-## Required Packages
+Run pnpm scripts declared by the target manifest. Confirm whether it has
+`build`, `build:stage`, `build:prod` or other scripts before running them.
+Read local runtime/data lifecycle docs before building or deploying: a build
+may depend on a database snapshot or other prepared inputs.
 
-| Package                                          | Purpose                        |
-| ------------------------------------------------ | ------------------------------ |
-| [@eldarlabs/core](../packages/core.md)           | Utilities, DB access, schemas  |
-| [@eldarlabs/svelte-ui](../packages/svelte-ui.md) | Svelte 5 UI components         |
-| [@eldarlabs/astro](../packages/astro.md)         | Astro layouts and integrations |
-
----
-
-## Folder Structure
-
-```
-src/
-├── content/              # Astro content collections
-│   ├── posts/            # Blog posts (MDX)
-│   └── config.ts         # Collection schemas
-│
-├── domain/               # Domain-driven features
-│   └── <feature>/
-│       ├── <feature>.ts           # Business logic
-│       ├── <Feature>.svelte       # Interactive component
-│       └── <feature>-db.server.ts # Database access
-│
-├── pages/                # Astro routes
-│   ├── index.astro
-│   ├── blog/
-│   │   ├── [...page].astro        # Paginated listing
-│   │   └── [slug].astro           # Individual post
-│   └── rss.xml.js                 # RSS feed
-│
-├── layouts/              # Page layouts (if not using @eldarlabs/astro)
-│
-└── lib/                  # Shared utilities
-    └── config.ts         # Site configuration
-```
-
----
-
-## Build Configuration
-
-### Environment-Based Builds
-
-```bash
-# Development (with draft posts, local images)
-npm run dev
-
-# Stage build
-npm run build:stage
-
-# Production build
-npm run build:prod
-```
-
-### Astro Config
-
-```javascript
-// astro.config.mjs
-import { defineConfig } from "astro/config";
-import svelte from "@astrojs/svelte";
-import tailwind from "@astrojs/tailwind";
-import cloudflare from "@astrojs/cloudflare";
-
-export default defineConfig({
-  integrations: [svelte(), tailwind()],
-  output: "hybrid",
-  adapter: cloudflare(),
-});
-```
-
----
-
-## Content Collections
-
-### Post Schema
-
-```typescript
-// src/content/config.ts
-import { defineCollection, z } from "astro:content";
-
-const posts = defineCollection({
-  type: "content",
-  schema: z.object({
-    title: z.string(),
-    description: z.string(),
-    date: z.date(),
-    tags: z.array(z.string()).optional(),
-    draft: z.boolean().optional(),
-  }),
-});
-
-export const collections = { posts };
-```
-
-### Draft Filtering
-
-```astro
----
-// Filter drafts in production
-const posts = await getCollection('posts', ({ data }) => {
-  return import.meta.env.DEV || !data.draft
-})
----
-```
-
----
-
-## Svelte Islands
-
-Use `client:*` directives for interactive components:
-
-```astro
----
-import SearchModal from '@eldarlabs/svelte-ui/search/SearchModal.svelte'
----
-
-<!-- Only hydrate when visible -->
-<SearchModal client:visible />
-
-<!-- Hydrate on page load -->
-<Counter client:load initialCount={0} />
-
-<!-- Hydrate on idle -->
-<Newsletter client:idle />
-```
-
----
-
-## Deployment
-
-### Cloudflare Pages
-
-```bash
-# Deploy to staging
-npm run deploy:stage
-
-# Deploy to production
-npm run deploy:prod
-```
-
-See [RELEASE.md](../../RELEASE.md) for the full release process.
-
----
-
-## Related Documentation
-
-- [Coding Guidelines](../../coding-guidelines.md) - Code style rules
-- [Testing Strategy](../../testing.md) - Testing approach
-- [Image Hosting](../../infrastructure/image-hosting.md) - R2 image architecture
+See [release guidance](../../RELEASE.md) and
+[image hosting](../../infrastructure/image-hosting.md) for those tasks.
