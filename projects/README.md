@@ -11,6 +11,7 @@ This directory serves as the Wayfinder index mapping all active applications, si
 ## 🌐 Sites
 
 - **[archlinks](../../../sites/archlinks/docs/README.md)** - Architecture inspiration and affiliate links directory.
+- **[catmarks](../../../sites/catmarks/README.md)** - Cat mischief entertainment brand: browser game, merch and damage reports.
 - **[enlucent](../../../sites/enlucent/package.json)** - Marketing site and landing page for the Enlucent suite.
 - **[portablecoffee](../../../sites/portablecoffee/docs/README.md)** - Affiliate site showcasing portable espresso makers and roasters.
 - **[rationaldev](../../../sites/rationaldev/docs/README.md)** - Web developer tips and affiliate resources.

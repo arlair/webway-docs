@@ -12,6 +12,7 @@ Use project manifests, configuration and source to verify commands and implement
 | TypeScript, imports, naming, shared-package boundaries | [Coding guidelines](./coding-guidelines.md) |
 | Tests and validation                                   | [Testing](./testing.md)                     |
 | pnpm, workspace linking, local development             | [Workspace setup](./workspace-setup.md)     |
+| Dev servers: start, restart, logs                      | [Dev servers](./dev-servers.md)             |
 | Architecture and project templates                     | [Architecture](./architecture/README.md)    |
 | Release and deployment                                 | [Release guide](./RELEASE.md)               |
 
