@@ -10,6 +10,7 @@ documentation and configuration override this shared baseline.
 | Astro page, content or island          | [`astro.md`](./astro.md)                                                                 |
 | React renderer                         | [`react.md`](./react.md)                                                                 |
 | Tailwind or DaisyUI styling            | [`styling.md`](./styling.md)                                                             |
+| Adding or referencing an image         | [`images.md`](./images.md)                                                               |
 | Electron main/preload/IPC architecture | [`../architecture/templates/electron-app.md`](../architecture/templates/electron-app.md) |
 
 For Svelte consumers, prefer `@eldarlabs/svelte-ui` over duplicating shared
