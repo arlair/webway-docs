@@ -9,7 +9,7 @@ Every image is one of two kinds. Decide which before adding it.
 
 ## Content images
 
-1. Add the file to the site's library: `webway-admin image add <absolute file> --site <siteId> --dir <folder> --name <name>`. It's converted to WebP and stored locally in webway-admin's `images-storage/<siteId>/`.
+1. Add the file to the site's library: `webway-admin image add <absolute file> --site <siteId> --dir <folder> --name <name>`. It's converted to WebP, at most 1200 px wide unless `--width` asks for more (full-screen art such as game scenes uses `--width 1600`; images are never enlarged), and stored locally in webway-admin's `images-storage/<siteId>/`. Pass `--replace` to overwrite an existing file.
 2. Reference it by its library path, such as `/scenes/broken-sluice.webp`. Never commit the file or copy it into `static/` or `public/`.
 3. Locally the image is served by webway-admin at `http://localhost:6100/api/images/serve/<siteId>/<path>`.
 4. Publish it to R2 when it's ready for staging or production: `webway-admin image publish --site <siteId> <path…>`. It's then served from `https://images.<domain>/<path>`.
